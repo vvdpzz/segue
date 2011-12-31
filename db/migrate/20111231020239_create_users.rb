@@ -18,5 +18,7 @@ class CreateUsers < ActiveRecord::Migration
       
       t.datetime :created_at
     end
+    add_index :users, :provider
+    add_index :users, :uid
   end
 end

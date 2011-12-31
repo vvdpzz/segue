@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111231020239) do
+ActiveRecord::Schema.define(:version => 20111231184439) do
+
+  create_table "posts", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "text",                 :limit => 560
+    t.string   "source",               :limit => 200
+    t.boolean  "truncated"
+    t.integer  "in_reply_to_post_id"
+    t.integer  "in_reply_to_user_id"
+    t.integer  "favorited"
+    t.string   "in_reply_to_nickname", :limit => 30
+    t.datetime "created_at"
+  end
+
+  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "provider"
@@ -29,5 +43,8 @@ ActiveRecord::Schema.define(:version => 20111231020239) do
     t.integer  "posts_count",                     :default => 0
     t.datetime "created_at"
   end
+
+  add_index "users", ["provider"], :name => "index_users_on_provider"
+  add_index "users", ["uid"], :name => "index_users_on_uid"
 
 end
