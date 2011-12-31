@@ -18,3 +18,8 @@
   background-color: #FCC;
   border: solid 1px #C66;
 }
+
+#sign-in-container{
+  margin:0 auto;
+  text-align:center;
+}

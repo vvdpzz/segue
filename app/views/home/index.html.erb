@@ -1,2 +1,6 @@
-<h1><%= current_user.name %></h1>
-<%= image_tag current_user.avatar_url %>
+<div id="sign-in-container">
+  <div id="sign-in-logo">
+    <%= image_tag "/assets/socialite.png" %>
+  </div>
+  <p><a class="btn-auth btn-github large" href="/signin">Sign in with <b>GitHub</b></a></p>
+</div>
