@@ -6,6 +6,7 @@ gem 'mysql2'
 gem 'omniauth', '>= 1.0.0'
 gem 'omniauth-github'
 
+gem 'twitter-bootstrap-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
