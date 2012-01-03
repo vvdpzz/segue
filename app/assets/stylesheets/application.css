@@ -24,3 +24,12 @@
   margin:0 auto;
   text-align:center;
 }
+#sign-in-logo{
+  height: 486px;
+}
+.larry-topbar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -14px;
+}

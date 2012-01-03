@@ -74,7 +74,7 @@
     var rotate = function ( r, revert ) {
         var rX = " rotateX(" + r.x + "deg) ",
             rY = " rotateY(" + r.y + "deg) ",
-            rZ = " rotatez(" + r.z + "deg) ";
+            rZ = " rotateZ(" + r.z + "deg) ";
         
         return revert ? rZ+rY+rX : rX+rY+rZ;
     };
@@ -194,12 +194,12 @@
             rotate: {
                 x: -parseInt(step.rotate.x, 10),
                 y: -parseInt(step.rotate.y, 10),
-                z: -parseInt(step.rotate.z, 10),
+                z: -parseInt(step.rotate.z, 10)
             },
             scale: {
                 x: 1 / parseFloat(step.scale.x),
                 y: 1 / parseFloat(step.scale.y),
-                z: 1 / parseFloat(step.scale.z),
+                z: 1 / parseFloat(step.scale.z)
             },
             translate: {
                 x: -step.translate.x,
@@ -226,10 +226,11 @@
     // EVENTS
     
     document.addEventListener("keydown", function ( event ) {
-        if ( event.keyCode == 9 || event.keyCode == 32 || (event.keyCode >= 37 && event.keyCode <= 40) ) {
+        if ( event.keyCode == 9 || ( event.keyCode >= 32 && event.keyCode <= 34 ) || (event.keyCode >= 37 && event.keyCode <= 40) ) {
             var active = $(".step.active", impress);
             var next = active;
             switch( event.keyCode ) {
+                case 33: ; // pg up
                 case 37: ; // left
                 case 38:   // up
                          next = steps.indexOf( active ) - 1;
@@ -237,6 +238,7 @@
                          break;
                 case 9:  ; // tab
                 case 32: ; // space
+                case 34: ; // pg down
                 case 39: ; // right
                 case 40:   // down
                          next = steps.indexOf( active ) + 1;
@@ -249,6 +251,7 @@
             event.preventDefault();
         }
     }, false);
+
     
     // Sometimes it's possible to trigger focus on first link with some keyboard action.
     // Browser in such a case tries to scroll the page to make this element visible

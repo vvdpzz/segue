@@ -6,6 +6,10 @@ gem 'mysql2'
 gem 'omniauth', '>= 1.0.0'
 gem 'omniauth-github'
 
+gem 'rabl'
+gem 'yajl-ruby', :require => "yajl"
+# gem 'msgpack'
+
 gem 'twitter-bootstrap-rails'
 
 # Gems used only for assets and not required
