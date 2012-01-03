@@ -17,6 +17,9 @@ class User < ActiveRecord::Base
           user[field] = auth['extra']['raw_info'][field] || ""
         end
       end
+      if auth['credentials']
+        user['token'] = auth['credentials']['token'] || ""
+      end
     end
   end
 end

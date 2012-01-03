@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :bio, :limit => 640
       t.string :avatar_url, :limit => 400
       t.string :html_url, :limit => 100
+      t.string :token
       
       t.integer :followers_count, :default => 0
       t.integer :friends_count, :default => 0
