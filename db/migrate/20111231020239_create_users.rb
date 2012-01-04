@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email
       t.string :location, :limit => 30
       t.string :bio, :limit => 640
-      t.string :avatar_url, :limit => 400
+      t.string :avatar_url, :limit => 140
       t.string :html_url, :limit => 100
       t.string :token
       

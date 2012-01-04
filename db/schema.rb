@@ -11,17 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111231184439) do
+ActiveRecord::Schema.define(:version => 20120104083042) do
+
+  create_table "post_tags", :id => false, :force => true do |t|
+    t.integer "post_id"
+    t.string  "tag",     :limit => 40
+  end
+
+  add_index "post_tags", ["post_id", "tag"], :name => "index_post_tags_on_post_id_and_tag"
 
   create_table "posts", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "text",                 :limit => 560
-    t.string   "source",               :limit => 200
-    t.boolean  "truncated"
+    t.string   "text",                :limit => 560
     t.integer  "in_reply_to_post_id"
     t.integer  "in_reply_to_user_id"
-    t.integer  "favorited"
-    t.string   "in_reply_to_nickname", :limit => 30
+    t.integer  "user_id",                                                           :null => false
+    t.string   "name",                :limit => 80
+    t.string   "nickname",            :limit => 30
+    t.string   "avatar_url",          :limit => 140
+    t.decimal  "geo_lat",                            :precision => 10, :scale => 5
+    t.decimal  "geo_long",                           :precision => 10, :scale => 5
+    t.text     "entities"
     t.datetime "created_at"
   end
 
@@ -35,7 +44,7 @@ ActiveRecord::Schema.define(:version => 20111231184439) do
     t.string   "email"
     t.string   "location",         :limit => 30
     t.string   "bio",              :limit => 640
-    t.string   "avatar_url",       :limit => 400
+    t.string   "avatar_url",       :limit => 140
     t.string   "html_url",         :limit => 100
     t.string   "token"
     t.integer  "followers_count",                 :default => 0

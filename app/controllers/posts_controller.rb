@@ -1,12 +1,12 @@
 class PostsController < ApplicationController
-  # respond_to :json
-  
   def create
-    post = Post.new params[:post]
-    if post.save
+    post = current_user.posts.build params[:post]
+    if post.text.nil?
+      hash = {key: 1, comment: "Post body must be present"}
+    elsif post.save
       hash = {key: 0, comment: "Success", post: post}
     else
-      hash = {key: 1, comment: "Database error"}
+      hash = {key: 9, comment: "Database error"}
     end
     render :json => hash, status: :ok
   end

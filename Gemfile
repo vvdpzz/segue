@@ -3,9 +3,22 @@ source 'http://rubygems.org'
 gem 'rails', '3.1.3'
 
 gem 'mysql2'
+
+# OAuth
 gem 'omniauth', '>= 1.0.0'
 gem 'omniauth-github'
 
+# twitter text processor
+gem 'twitter-text'
+
+# redis
+gem 'hiredis'
+gem 'redis', :require => ["redis/connection/hiredis", "redis"]
+
+# resque
+gem 'resque'
+
+# CSS framework
 gem 'twitter-bootstrap-rails'
 
 # Gems used only for assets and not required
