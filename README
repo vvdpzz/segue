@@ -1,2 +1,5 @@
 A Segue
 QUEUE=* rake environment resque:work
+./configure --prefix=/usr/local/sphinx
+sudo make && sudo make install
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
