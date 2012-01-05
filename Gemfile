@@ -14,9 +14,13 @@ gem 'twitter-text'
 # redis
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
+gem 'redis-namespace'
 
 # resque
 gem 'resque'
+
+# Sphinx for real time search
+gem 'thinking-sphinx', '2.0.11'
 
 # CSS framework
 gem 'twitter-bootstrap-rails'

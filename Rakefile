@@ -6,10 +6,8 @@ require File.expand_path('../config/application', __FILE__)
 
 Segue::Application.load_tasks
 
-namespace :resque do
-  task :setup => :environment do
-    Resque.workers.each do |worker|
-      puts worker.to_s
-    end
-  end
+begin
+  require 'thinking_sphinx/tasks'
+rescue LoadError
+  puts "You can't load Thinking Sphinx tasks unless the thinking-sphinx gem is installed."
 end
