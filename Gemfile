@@ -17,9 +17,6 @@ gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 gem 'redis-namespace'
 gem 'redis-objects'
 
-# CSV
-gem 'excelsior'
-
 # resque
 gem 'resque'
 
