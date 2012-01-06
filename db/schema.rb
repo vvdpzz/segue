@@ -11,14 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120104083042) do
+ActiveRecord::Schema.define(:version => 20120106085526) do
 
-  create_table "post_tags", :id => false, :force => true do |t|
-    t.integer "post_id"
-    t.string  "tag",     :limit => 40
+  create_table "friendships", :force => true do |t|
+    t.integer "user_id"
+    t.integer "friend_id"
   end
 
-  add_index "post_tags", ["post_id", "tag"], :name => "index_post_tags_on_post_id_and_tag"
+  add_index "friendships", ["user_id", "friend_id"], :name => "index_friendships_on_user_id_and_friend_id"
+
+  create_table "post_tags", :force => true do |t|
+    t.integer "post_id"
+    t.integer "tag_id"
+  end
+
+  add_index "post_tags", ["post_id", "tag_id"], :name => "index_post_tags_on_post_id_and_tag_id"
 
   create_table "posts", :force => true do |t|
     t.string   "text",                :limit => 560
@@ -35,6 +42,17 @@ ActiveRecord::Schema.define(:version => 20120104083042) do
   end
 
   add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
+
+  create_table "tags", :force => true do |t|
+    t.string "name", :limit => 40
+  end
+
+  create_table "tagships", :force => true do |t|
+    t.integer "user_id"
+    t.integer "tag_id"
+  end
+
+  add_index "tagships", ["user_id", "tag_id"], :name => "index_tagships_on_user_id_and_tag_id"
 
   create_table "users", :force => true do |t|
     t.string   "provider"
@@ -54,7 +72,6 @@ ActiveRecord::Schema.define(:version => 20120104083042) do
     t.datetime "created_at"
   end
 
-  add_index "users", ["provider"], :name => "index_users_on_provider"
-  add_index "users", ["uid"], :name => "index_users_on_uid"
+  add_index "users", ["provider", "uid"], :name => "index_users_on_provider_and_uid"
 
 end

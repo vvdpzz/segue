@@ -1,5 +1,6 @@
 class Post < ActiveRecord::Base
   include Twitter::Extractor
+  include Redis::Objects
   
   # relations
   belongs_to :user, :counter_cache => true
@@ -17,6 +18,9 @@ class Post < ActiveRecord::Base
     indexes text
     has created_at
   end
+  
+  # redis objects
+  set :cached_tags
   
   protected
     def set_user_properties

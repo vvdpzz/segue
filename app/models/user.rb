@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Redis::Objects
+  
   attr_accessible :provider, :uid, :name, :nickname, :email, :bio, :location, :avatar_url, :html_url
   
   # relations
@@ -11,6 +13,11 @@ class User < ActiveRecord::Base
     
     has created_at
   end
+  
+  # redis objects
+  set :cached_followings
+  set :cached_followers
+  set :cached_tags
   
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -30,5 +37,21 @@ class User < ActiveRecord::Base
         user['token'] = auth['credentials']['token'] || ""
       end
     end
+  end
+  
+  def follow_user(friend_id)
+    self.id == friend_id ? false : Friendship.find_or_create_by_user_id_and_friend_id(self.id, friend_id)
+  end
+  
+  def unfollow_user(friend_id)
+    self.id == friend_id ? false : Friendship.find_by_user_id_and_friend_id(self.id, friend_id).destroy
+  end
+  
+  def follow_tag(tag_id)
+    Tagship.find_or_create_by_user_id_and_tag_id(self.id, tag_id)
+  end
+  
+  def unfollow_tag(tag_id)
+    Tagship.find_by_user_id_and_tag_id(self.id, tag_id).destroy
   end
 end
