@@ -1,5 +1,13 @@
 A Segue
+
+# Resque
 QUEUE=* rake environment resque:setup
+
+# Sphinx
+wget http://sphinxsearch.com/files/sphinx-2.0.3-release.tar.gz
+
 ./configure --prefix=/usr/local/sphinx
+
 sudo make && sudo make install
+
 sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
