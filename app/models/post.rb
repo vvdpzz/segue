@@ -31,5 +31,6 @@ class Post < ActiveRecord::Base
 
     def asyncs
       Resque.enqueue(ExtractTag, self.id)
+      Resque.enqueue(NewPost, self.id)
     end
 end

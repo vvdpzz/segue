@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   set :cached_followings
   set :cached_followers
   set :cached_tags
+  list :cached_timeline
   
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -37,6 +38,11 @@ class User < ActiveRecord::Base
         user['token'] = auth['credentials']['token'] || ""
       end
     end
+  end
+  
+  def home_timeline(page = 1)
+    from, to = (page - 1) * 20, (page * 20) - 1
+    Post.where(:id => self.cached_timeline[from..to].to_a)
   end
   
   def follow_user(friend_id)

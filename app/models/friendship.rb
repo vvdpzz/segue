@@ -7,9 +7,11 @@ class Friendship < ActiveRecord::Base
   
   def add_to_denormalized_friends
     user.cached_followings.add friend.id
+    friend.cached_followers.add user.id
   end
   
   def remove_from_denormalized_friends
     user.cached_followings.delete friend.id
+    friend.cached_followers.delete user.id
   end
 end
