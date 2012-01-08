@@ -48,6 +48,11 @@ class User < ActiveRecord::Base
     Post.where(:id => self.cached_timeline[from..to].to_a)
   end
   
+  def newest_posts
+    offset = self.cached_offset.value
+    Post.where(:id => self.cached_timeline[0..offset-1].to_a) if offset > 0
+  end
+  
   def follow_user(friend_id)
     self.id == friend_id ? false : Friendship.find_or_create_by_user_id_and_friend_id(self.id, friend_id)
   end
