@@ -13,6 +13,7 @@ class NewPost
     # write into their timeline
     followers.each do |follower|
       $redis.lpush("user:#{follower}:cached_timeline", post_id)
+      $redis.incr("user:#{follower}:cached_offset")
     end
   end
 end

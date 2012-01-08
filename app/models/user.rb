@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   set :cached_followers
   set :cached_tags
   list :cached_timeline
+  counter :cached_offset
   
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -41,7 +42,9 @@ class User < ActiveRecord::Base
   end
   
   def home_timeline(page = 1)
-    from, to = (page - 1) * 20, (page * 20) - 1
+    self.cached_offset.reset if page == 1
+    offset = self.cached_offset.value
+    from, to = (page - 1) * 20 + offset, (page * 20) + offset - 1
     Post.where(:id => self.cached_timeline[from..to].to_a)
   end
   
