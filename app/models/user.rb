@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
   set :cached_tags
   list :cached_timeline
   counter :cached_offset
+  # cached New Posts Count
+  counter :cached_npc
   
   def self.create_with_omniauth(auth)
     create! do |user|
@@ -49,8 +51,11 @@ class User < ActiveRecord::Base
   end
   
   def newest_posts
-    offset = self.cached_offset.value
-    Post.where(:id => self.cached_timeline[0..offset-1].to_a) if offset > 0
+    npc = self.cached_npc.value
+    if npc > 0
+      self.cached_npc.reset
+      Post.where(:id => self.cached_timeline[0..npc-1].to_a)
+    end
   end
   
   def follow_user(friend_id)

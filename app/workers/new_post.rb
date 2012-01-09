@@ -14,6 +14,7 @@ class NewPost
     followers.each do |follower|
       $redis.lpush("user:#{follower}:cached_timeline", post_id)
       $redis.incr("user:#{follower}:cached_offset")
+      $redis.incr("user:#{follower}:cached_npc")
     end
   end
 end
