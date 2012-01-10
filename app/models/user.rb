@@ -102,12 +102,12 @@ class User < ActiveRecord::Base
     
     def get_github_followers login
       github = Octokit::Client.new
-      github.followers(login).map(&:login)
+      github.followers(login)
     end
 
     def get_github_following login
       github = Octokit::Client.new
-      github.following(login).map(&:login)
+      github.following(login)
     end
   end
 end
