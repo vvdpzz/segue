@@ -73,4 +73,34 @@ class User < ActiveRecord::Base
   def unfollow_tag(tag_id)
     Tagship.find_by_user_id_and_tag_id(self.id, tag_id).destroy
   end
+  
+  # Github
+  def get_github_followers
+    github = Github.new :oauth_token => self.token
+    github.users.followers.map(&:login)
+  end
+  
+  def get_github_following
+    github = Github.new :oauth_token => self.token
+    github.users.following.map(&:login)
+  end
+  
+  class << self
+    def fetch_repo_and_lang_from login
+      langs, repos = {}, []
+      github = Github.new
+      github.repos.repos({user: login}).collect{|r| {:fork => r.fork, :name => r.name}}.each do |repo|
+        repos << repo[:name]
+        langs.merge! github.repos.languages(login, repo[:name]) if not repo[:fork]
+      end
+      langs.keys.each {|lang| $redis.sadd("user:#{login}:lang", lang)}
+      repos.each {|repo| $redis.sadd("user:#{login}:repo", repo)}
+    end
+
+    %w(repo lang).each do |name|
+      define_method("#{name}_of") do |login|
+        $redis.smembers "user:#{login}:#{name}"
+      end
+    end
+  end
 end

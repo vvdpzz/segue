@@ -8,6 +8,9 @@ gem 'mysql2'
 gem 'omniauth', '>= 1.0.0'
 gem 'omniauth-github'
 
+# APIs
+gem 'github_api'
+
 # twitter text processor
 gem 'twitter-text'
 
