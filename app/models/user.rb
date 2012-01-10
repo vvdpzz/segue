@@ -75,24 +75,14 @@ class User < ActiveRecord::Base
   end
   
   # Github
-  def get_github_followers
-    github = Github.new :oauth_token => self.token
-    github.users.followers.map(&:login)
-  end
-  
-  def get_github_following
-    github = Github.new :oauth_token => self.token
-    github.users.following.map(&:login)
-  end
-  
   class << self
     def fetch_repo_and_lang_and_col_from login
       langs, repos, collaborators = {}, [], []
-      github = Github.new
-      github.repos.repos({user: login}).collect{|r| {:fork => r.fork, :name => r.name}}.each do |repo|
+      github = Octokit::Client.new
+      github.repos(login).collect{|r| {:fork => r.fork, :name => r.name}}.each do |repo|
         if not repo[:fork]
-          langs.merge! github.repos.languages(login, repo[:name]) 
-          collaborators += github.repos.collaborators(login, repo[:name]).map(&:login)
+          langs.merge! github.languages("#{login}/#{repo[:name]}")
+          collaborators += github.collaborators("#{login}/#{repo[:name]}").map(&:login)
         end
         repos << repo[:name]
       end
@@ -103,11 +93,21 @@ class User < ActiveRecord::Base
       # rm self from collaborators
       $redis.srem("user:#{login}:col", login)
     end
-
+  
     %w(repo lang col).each do |name|
       define_method("#{name}_of") do |login|
         $redis.smembers "user:#{login}:#{name}"
       end
+    end
+    
+    def get_github_followers login
+      github = Octokit::Client.new
+      github.followers(login).map(&:login)
+    end
+
+    def get_github_following login
+      github = Octokit::Client.new
+      github.following(login).map(&:login)
     end
   end
 end

@@ -9,7 +9,7 @@ gem 'omniauth', '>= 1.0.0'
 gem 'omniauth-github'
 
 # APIs
-gem 'github_api'
+gem 'octokit'
 
 # twitter text processor
 gem 'twitter-text'
