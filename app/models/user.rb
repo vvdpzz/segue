@@ -86,18 +86,25 @@ class User < ActiveRecord::Base
   end
   
   class << self
-    def fetch_repo_and_lang_from login
-      langs, repos = {}, []
+    def fetch_repo_and_lang_and_col_from login
+      langs, repos, collaborators = {}, [], []
       github = Github.new
       github.repos.repos({user: login}).collect{|r| {:fork => r.fork, :name => r.name}}.each do |repo|
+        if not repo[:fork]
+          langs.merge! github.repos.languages(login, repo[:name]) 
+          collaborators += github.repos.collaborators(login, repo[:name]).map(&:login)
+        end
         repos << repo[:name]
-        langs.merge! github.repos.languages(login, repo[:name]) if not repo[:fork]
       end
       langs.keys.each {|lang| $redis.sadd("user:#{login}:lang", lang)}
       repos.each {|repo| $redis.sadd("user:#{login}:repo", repo)}
+      collaborators.uniq.each{|user| $redis.sadd("user:#{login}:col", user)}
+      
+      # rm self from collaborators
+      $redis.srem("user:#{login}:col", login)
     end
 
-    %w(repo lang).each do |name|
+    %w(repo lang col).each do |name|
       define_method("#{name}_of") do |login|
         $redis.smembers "user:#{login}:#{name}"
       end
