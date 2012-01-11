@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120106085526) do
+ActiveRecord::Schema.define(:version => 20120111112828) do
 
   create_table "friendships", :force => true do |t|
     t.integer "user_id"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(:version => 20120106085526) do
   end
 
   add_index "friendships", ["user_id", "friend_id"], :name => "index_friendships_on_user_id_and_friend_id"
+
+  create_table "octodata", :force => true do |t|
+    t.string  "login"
+    t.integer "data_type"
+    t.text    "content"
+  end
 
   create_table "post_tags", :force => true do |t|
     t.integer "post_id"
@@ -42,6 +48,35 @@ ActiveRecord::Schema.define(:version => 20120106085526) do
   end
 
   add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
+
+  create_table "rapns_feedback", :force => true do |t|
+    t.string   "device_token", :limit => 64, :null => false
+    t.datetime "failed_at",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rapns_feedback", ["device_token"], :name => "index_rapns_feedback_on_device_token"
+
+  create_table "rapns_notifications", :force => true do |t|
+    t.integer  "badge"
+    t.string   "device_token",          :limit => 64,                       :null => false
+    t.string   "sound",                               :default => "1.aiff"
+    t.string   "alert"
+    t.text     "attributes_for_device"
+    t.integer  "expiry",                              :default => 86400,    :null => false
+    t.boolean  "delivered",                           :default => false,    :null => false
+    t.datetime "delivered_at"
+    t.boolean  "failed",                              :default => false,    :null => false
+    t.datetime "failed_at"
+    t.integer  "error_code"
+    t.string   "error_description"
+    t.datetime "deliver_after"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rapns_notifications", ["delivered", "failed", "deliver_after"], :name => "index_rapns_notifications_on_delivered_failed_deliver_after"
 
   create_table "tags", :force => true do |t|
     t.string "name", :limit => 40

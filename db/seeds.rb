@@ -1,26 +1,28 @@
+# $redis.rpush("dl", "vvdpzz")
+# count = $redis.incr("count")
+
+class String
+  def red; colorize(self, "\e[1m\e[31m"); end
+  def green; colorize(self, "\e[1m\e[32m"); end
+  def dark_green; colorize(self, "\e[32m"); end
+  def yellow; colorize(self, "\e[1m\e[33m"); end
+  def blue; colorize(self, "\e[1m\e[34m"); end
+  def dark_blue; colorize(self, "\e[34m"); end
+  def pur; colorize(self, "\e[1m\e[35m"); end
+  def colorize(text, color_code)  "#{color_code}#{text}\e[0m" end
+end
+
 github = Octokit::Client.new
 
-list = []
-
-list.push "Zhengquan"
-
-count = 0
-
-$redis.del "dl"
-
-while count < 1 do
+while $redis.llen('dl') > 0 do
+  count = $redis.incr("count")
   
-  count += 1
+  puts "count = #{count} & list length = #{$redis.llen('dl')}"
   
-  puts "Count = #{count}"
-  puts "List = #{list.to_s}"
+  login = $redis.lpop("dl")
   
-  login = list.shift
-  
-  print "#{login}\t\t\t\t"
-  
-  if not $redis.sismember("dl", login)
-    $redis.sadd("dl", login)
+  if not $redis.sismember("set", login)
+    $redis.sadd("set", login)
     
     followers = following = repos = cols = []
     langs = {}
@@ -36,19 +38,30 @@ while count < 1 do
       repos.push repo[:name]
     end
     
+    cols.uniq!
+    cols.delete(login) if cols
+    
+    Octodata.create(login: login, data_type: 1, content: followers.join(", "))
+    Octodata.create(login: login, data_type: 2, content: following.join(", "))
+    Octodata.create(login: login, data_type: 3, content: langs.keys.join(", "))
+    Octodata.create(login: login, data_type: 4, content: repos.join(", "))
+    Octodata.create(login: login, data_type: 5, content: cols.join(", "))
+    
     # write into redis
-    followers.each  {|user|  $redis.sadd("user:#{login}:fers", user)}
-    following.each  {|user|  $redis.sadd("user:#{login}:fing", user)}
-    langs.keys.each {|lang|  $redis.sadd("user:#{login}:lang", lang)}
-    repos.each      {|repo|  $redis.sadd("user:#{login}:repo", repo)}
-    cols.uniq.each  {|user|  $redis.sadd("user:#{login}:cols", user)}
+    # followers.each  {|user|  $redis.sadd("user:#{login}:fers", user)}
+    # following.each  {|user|  $redis.sadd("user:#{login}:fing", user)}
+    # langs.keys.each {|lang|  $redis.sadd("user:#{login}:lang", lang)}
+    # repos.each      {|repo|  $redis.sadd("user:#{login}:repo", repo)}
+    # cols.uniq.each  {|user|  $redis.sadd("user:#{login}:cols", user)}
     
     # remove self from collaborators
-    $redis.srem("user:#{login}:cols", login)
+    # $redis.srem("user:#{login}:cols", login)
     
     # take nodes to dl
-    list += (followers + following).uniq
+    (followers + following).uniq.each do |user|
+      $redis.lpush("dl", user) if not $redis.sismember("set", user)
+    end
     
-    print "[OK]\n"
+    printf "%-60s %s\n", login.pur, "[ DONE ]".green
   end
 end
