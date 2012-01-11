@@ -59,7 +59,7 @@ while $redis.llen('dl') > 0 do
     
     # take nodes to dl
     (followers + following).uniq.each do |user|
-      $redis.lpush("dl", user) if not $redis.sismember("set", user)
+      $redis.rpush("dl", user) if not $redis.sismember("set", user)
     end
     
     printf "%-60s %s\n", login.pur, "[ DONE ]".green
