@@ -8,14 +8,15 @@ class SessionsController < ApplicationController
     user = User.where(:provider => auth['provider'], 
                       :uid => auth['uid']).first || User.create_with_omniauth(auth)
     session[:user_id] = user.id
+    $redis.setbit("login:#{Time.now.strftime('%y%m%d')}", user.id, 1)
     redirect_to user, :notice => 'Signed in!'
   end
-
+  
   def destroy
     reset_session
     redirect_to root_url, :notice => 'Signed out!'
   end
-
+  
   def failure
     redirect_to root_url, :alert => "Authentication error: #{params[:message].humanize}"
   end
