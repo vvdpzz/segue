@@ -5,5 +5,7 @@
 // the compiled file.
 //
 //= require jquery
+//= require underscore
+//= require backbone-optamd3-min
 //= require twitter/bootstrap
 //= require_tree .
