@@ -24,18 +24,30 @@ while $redis.llen('dl') > 0 do
   if not $redis.sismember("set", login)
     $redis.sadd("set", login)
     
-    followers = following = repos = cols = []
+    followers = []
+    following = []
+    repos = []
+    cols = []
+    all_repos = {}
     langs = {}
+    threads = []
     
-    followers = github.followers(login)
-    following = github.following(login)
+    all_repos = github.repos(login).collect{|r| {:fork => r.fork, :name => r.name}}
     
-    github.repos(login).collect{|r| {:fork => r.fork, :name => r.name}}.each do |repo|
+    threads << Thread.new { Thread.current[:name]  = "Fetching followers"; followers = github.followers(login) }
+    threads << Thread.new { Thread.current[:name]  = "Fetching following"; following = github.following(login) }
+    
+    all_repos.each do |repo|
       if not repo[:fork]
-        langs.merge! github.languages("#{login}/#{repo[:name]}")
-        cols += github.collaborators("#{login}/#{repo[:name]}").map(&:login)
+        threads << Thread.new { Thread.current[:name]  = "Fetching #{repo[:name]}'s languages"; langs.merge! github.languages("#{login}/#{repo[:name]}") }
+        threads << Thread.new { Thread.current[:name]  = "Fetching #{repo[:name]}'s collaborators"; cols += github.collaborators("#{login}/#{repo[:name]}").map(&:login) }
       end
       repos.push repo[:name]
+    end
+    
+    threads.each do |th|
+      puts "#{th.inspect}: #{th[:name]}"
+      th.join
     end
     
     cols.uniq!
