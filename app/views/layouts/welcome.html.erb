@@ -21,7 +21,12 @@
       <%- flash.each do |name, msg| -%>
         <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
       <%- end -%>
-      <%= yield %>
+      <div id="sign-in-container">
+        <div id="sign-in-logo">
+          <%= image_tag "/assets/socialite.png" %>
+        </div>
+        <p><a class="btn-auth btn-github large" href="/login">Sign in with <b>GitHub</b></a></p>
+      </div>
     </div>
   </div>
 </body>

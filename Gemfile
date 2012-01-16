@@ -27,7 +27,10 @@ gem 'resque'
 gem 'thinking-sphinx', '2.0.11'
 
 # CSS framework
-gem 'twitter-bootstrap-rails'
+# gem 'twitter-bootstrap-rails'
+
+# template
+gem 'ejs'
 
 # Gems used only for assets and not required
 # in production environments by default.
