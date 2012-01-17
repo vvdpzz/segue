@@ -14,16 +14,20 @@ class App.Views.Posts.IndexView extends Backbone.View
     @$("form").closest(".tweet-box").removeClass("condensed")
   
   addCondensed: ->
+    console.log @model.get("text")
     if @model.get("text").length == 0
       @$("form").closest(".tweet-box").addClass("condensed")
   
   save: (e) ->
     e.preventDefault()
     e.stopPropagation()
+    that = this
     @collection.create(@model.toJSON(),
       success: (post) =>
         @addOneToHead(post)
         @$("form")[0].reset()
+        that.model.set({text: ""})
+        @$("form").closest(".tweet-box").addClass("condensed")
 
       error: (post, jqXHR) =>
         @model.set({errors: $.parseJSON(jqXHR.responseText)})
