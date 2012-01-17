@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
                       :uid => auth['uid']).first || User.create_with_omniauth(auth)
     session[:user_id] = user.id
     $redis.setbit("login:#{Time.now.strftime('%y%m%d')}", user.id, 1)
-    redirect_to user
+    redirect_to root_url
   end
   
   def destroy

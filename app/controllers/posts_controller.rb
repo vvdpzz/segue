@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     if post.text.nil?
       hash = {key: 1, comment: "Post body must be present"}
     elsif post.save
-      hash = {key: 0, comment: "Success", post: post}
+      hash = post
     else
       hash = {key: 9, comment: "Database error"}
     end
