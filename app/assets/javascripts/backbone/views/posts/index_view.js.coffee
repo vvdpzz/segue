@@ -6,6 +6,7 @@ class App.Views.Posts.IndexView extends Backbone.View
     "submit #new-tweet": "save"
     "click textarea": "rmCondensed"
     "blur textarea": "addCondensed"
+    "keyup textarea": "toggleButton"
 
   initialize: () ->
     @options.posts.bind('reset', @addAll)
@@ -14,9 +15,15 @@ class App.Views.Posts.IndexView extends Backbone.View
     @$("form").closest(".tweet-box").removeClass("condensed")
   
   addCondensed: ->
-    console.log @model.get("text")
-    if @model.get("text").length == 0
+    len = @model.get("text").length
+    if len == 0
       @$("form").closest(".tweet-box").addClass("condensed")
+
+  toggleButton: (e) ->
+    if e.target.value.length == 0
+      @$("form").find("button").removeClass("primary-btn").addClass("disabled")
+    else
+      @$("form").find("button").removeClass("disabled").addClass("primary-btn")
   
   save: (e) ->
     e.preventDefault()
@@ -28,6 +35,7 @@ class App.Views.Posts.IndexView extends Backbone.View
         @$("form")[0].reset()
         that.model.set({text: ""})
         @$("form").closest(".tweet-box").addClass("condensed")
+        @$("form").find("button").removeClass("primary-btn").addClass("disabled")
 
       error: (post, jqXHR) =>
         @model.set({errors: $.parseJSON(jqXHR.responseText)})
