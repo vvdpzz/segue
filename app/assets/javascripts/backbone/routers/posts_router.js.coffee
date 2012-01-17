@@ -4,27 +4,17 @@ class App.Routers.PostsRouter extends Backbone.Router
     @posts.reset options.posts
 
   routes:
-    "!/new"      : "newPost"
-    "!/index"    : "index"
     "!/:id"      : "show"
-    ".*"        : "index"
-
-  newPost: ->
-    @view = new App.Views.Posts.NewView(collection: @posts)
-    $("#posts").html(@view.render().el)
+    "!"         : "index"
+    ".*"         : "index"
 
   index: ->
     @view = new App.Views.Posts.IndexView(posts: @posts)
-    $("#posts").html(@view.render().el)
+    $("#page-container").html(@view.render().el)
+    $("ul.nav li.home").addClass("active")
 
   show: (id) ->
-    post = @posts.get(id)
-
-    @view = new App.Views.Posts.ShowView(model: post)
-    $("#posts").html(@view.render().el)
-
-  edit: (id) ->
-    post = @posts.get(id)
-
-    @view = new App.Views.Posts.EditView(model: post)
-    $("#posts").html(@view.render().el)
+    $("ul.nav li").removeClass("active")
+    $.get "/users/#{id}", (user, textStatus, xhr) ->
+      @view = new App.Views.Users.ShowView(model: user)
+      $("#page-container").html(@view.render().el)
