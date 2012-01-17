@@ -43,6 +43,16 @@
     </div>
   </div>
   <script type="text/javascript" charset="utf-8">
+    var option = {
+      pastMask: '%yyyy %mmm %d',
+      masks: [{
+        distance: 43200,
+        mask: '%h:%MM %tt'
+      },{
+        distance: 31556926,
+        mask: '%mmm %d'
+      }]
+    };
     App.current_user = {
       id: "<%= current_user.id %>",
       nickname: "<%= current_user.nickname %>",

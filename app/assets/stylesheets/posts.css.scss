@@ -46,10 +46,6 @@ h2 {
   margin-top: 1px;
 }
 
-.username, .time, .time a, .metadata, .metadata a {
-  font-size: 12px;
-  color: #999;
-}
 .stream-item-header .avatar, .permalink-header .avatar {
   position: absolute;
   top: 12px;
@@ -71,10 +67,6 @@ s {
 }
 b {
   font-weight: normal;
-}
-.username, .time, .time a, .metadata, .metadata a {
-  font-size: 12px;
-  color: #999;
 }
 .content-header {
   border-left: 1px solid #EEE;
@@ -253,10 +245,6 @@ ul.stats{
 }
 .mini-profile .metadata {
   font-size: 11px;
-}
-.username, .time, .time a, .metadata, .metadata a {
-  font-size: 12px;
-  color: #999;
 }
 .module .post-box {
   line-height: 1;

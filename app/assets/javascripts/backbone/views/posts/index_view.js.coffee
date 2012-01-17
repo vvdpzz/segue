@@ -30,10 +30,12 @@ class App.Views.Posts.IndexView extends Backbone.View
   addOneToHead: (post) =>
     view = new App.Views.Posts.PostView({model : post})
     @$("#stream-items").prepend(view.render().el)
+    @$('time').sensible(option)
 
   render: =>
     $(@el).html(@template(posts: @options.posts.toJSON() ))
     @addAll()
+    @$('time').sensible(option)
     @collection = this.options.posts
     @model = new @collection.model()
     this.$("form").backboneLink(@model)
