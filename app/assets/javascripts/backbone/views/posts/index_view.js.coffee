@@ -3,11 +3,20 @@ App.Views.Posts ||= {}
 class App.Views.Posts.IndexView extends Backbone.View
   template: JST["backbone/templates/posts/index"]
   events:
-    "submit #new-post": "save"
+    "submit #new-tweet": "save"
+    "click textarea": "rmCondensed"
+    "blur textarea": "addCondensed"
 
   initialize: () ->
     @options.posts.bind('reset', @addAll)
     
+  rmCondensed: (e) ->
+    @$("form").closest(".tweet-box").removeClass("condensed")
+  
+  addCondensed: (e) ->
+    if @model.get("text").length == 0
+      @$("form").closest(".tweet-box").addClass("condensed")
+  
   save: (e) ->
     e.preventDefault()
     e.stopPropagation()
@@ -39,5 +48,5 @@ class App.Views.Posts.IndexView extends Backbone.View
     @collection = this.options.posts
     @model = new @collection.model()
     this.$("form").backboneLink(@model)
-
+    
     return this
