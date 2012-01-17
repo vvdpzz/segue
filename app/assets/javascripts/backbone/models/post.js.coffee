@@ -12,7 +12,7 @@ class App.Models.Post extends Backbone.Model
     in_reply_to_user_id: null
     name: null
     nickname: null
-    text: null
+    text: ""
     user_id: null
 
 class App.Collections.PostsCollection extends Backbone.Collection

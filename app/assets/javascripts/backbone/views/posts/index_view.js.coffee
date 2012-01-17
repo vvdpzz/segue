@@ -10,10 +10,10 @@ class App.Views.Posts.IndexView extends Backbone.View
   initialize: () ->
     @options.posts.bind('reset', @addAll)
     
-  rmCondensed: (e) ->
+  rmCondensed: ->
     @$("form").closest(".tweet-box").removeClass("condensed")
   
-  addCondensed: (e) ->
+  addCondensed: ->
     if @model.get("text").length == 0
       @$("form").closest(".tweet-box").addClass("condensed")
   
