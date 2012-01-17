@@ -20,6 +20,7 @@ class App.Views.Posts.IndexView extends Backbone.View
       @$("form").closest(".tweet-box").addClass("condensed")
 
   toggleButton: (e) ->
+    @$(".tweet-counter").val(140 - e.target.value.length)
     if e.target.value.length == 0
       @$("form").find("button").removeClass("primary-btn").addClass("disabled")
     else
