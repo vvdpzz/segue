@@ -21,11 +21,11 @@ body {
   padding-bottom: 0;
 }
 .dashboard {
-  float: left;
+  float: right;
   width: 302px;
 }
 .content-main {
-  float: right;
+  float: left;
   width: 522px;
 }
 .content-main, .content-narrow, .page-canvas, .permalink {
